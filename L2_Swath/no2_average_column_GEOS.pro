@@ -10,14 +10,15 @@ inymid = InGrid.ymid
 
 close, /all
 
-year = 2013
+year = 2012
 no2_sum = fltarr(InGrid.IMX,InGrid.JMX)
 month_sum  = fltarr(InGrid.IMX,InGrid.JMX)
 nod_sum = fltarr(InGrid.IMX,InGrid.JMX)
 sample2_sum = fltarr(InGrid.IMX,InGrid.JMX)
-period = 'JantoJun'
+;period = 'JantoJun'
+period = 'JantoDec'
 
-For month = 1, 6 do begin
+For month = 1, 12 do begin
 
 	Yr4 = string(year,format='(i4.4)')
         Mon2 = string(month,format='(i2.2)')

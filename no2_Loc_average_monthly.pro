@@ -1,6 +1,6 @@
-pro no2_Loc_average
+pro no2_Loc_average_monthly
   ;scan file
-  For year = 2011, 2011 do begin
+  For year = 2011, 2012 do begin
     For month = 1,12 do begin
       For day = 1,31 do begin
         nymd = year*10000L+month*100L+day*1L
@@ -17,7 +17,7 @@ pro no2_Loc_average
                         20100229,20100230,20100231,20100431,20100631,20100931,20101131,$
                         20110229,20110230,20110231,20110431,20110631,20110931,20111131,$
                         20120230,20120231,20120431,20120631,20120931,20121131,$
-			20060228,20060301,20060302,20080928,20080929,20120624 ])$
+			20060228,20060301,20060302,20080928,20080929,20120624])$
                         eq 1.0 then continue
         filename = file_search('/z6/satellite/OMI/no2/OMI_Lok/'+Yr4+'/'+Yr4+'_'+Mon2+'_'+Day2+'_NO2TropCS30.hdf5')
         if filename[0] eq "" then begin
@@ -31,10 +31,12 @@ pro no2_Loc_average
   For year = 2011, 2011 do begin
     nlon_g = 3600
     nlat_g = 1800
-    no2 = fltarr(nlon_g,nlat_g)
-    number = fltarr(nlon_g,nlat_g)
 
     For month = 1,12 do begin
+      print,year,month
+      no2 = fltarr(nlon_g,nlat_g)
+      number = fltarr(nlon_g,nlat_g)
+
       For day = 1,31 do begin
         nymd = year*10000L+month*100L+day*1L
         Yr4 = string(year,format='(i4.4)')
@@ -80,8 +82,8 @@ pro no2_Loc_average
 
 		endfor
 	endfor
-      endfor
-    endfor
+    
+   endfor;day
 
 
   For J = 0, nlat_g -1 do begin
@@ -103,11 +105,11 @@ pro no2_Loc_average
   endfor
   undefine, tmp
 
-  header_output = [['ncols 3600'],['nrows 1800'],['xllcorner -180'],['yllcorner -90'],['cellsize 0.1'],['nodata_value -999.0']]
-  outfile ='/home/liufei/Data/OMI_Lok/Result/'+Yr4+'_anual_Average_global_0.1X0.1.asc'
-  openw,lun,outfile,/get_lun
-  printf,lun,header_output,no2
-  close,lun
+ ; header_output = [['ncols 3600'],['nrows 1800'],['xllcorner -180'],['yllcorner -90'],['cellsize 0.1'],['nodata_value -999.0']]
+ ; outfile ='/home/liufei/Data/OMI_Lok/Result/'+Yr4+'_anual_Average_global_0.1X0.1.asc'
+ ; openw,lun,outfile,/get_lun
+ ; printf,lun,header_output,no2
+ ; close,lun
 
 
   ;China=[15,72;55,136]
@@ -117,10 +119,11 @@ pro no2_Loc_average
   no2_China= no2[(180+72)/0.1:(180+72)/0.1+nlon-1,(90-55)/0.1:(90-55)/0.1+nlat-1]
 
   header_output = [['ncols 640'],['nrows 400'],['xllcorner 72'],['yllcorner 15'],['cellsize 0.1'],['nodata_value -999.0']]
-  outfile ='/home/liufei/Data/OMI_Lok/Result/'+Yr4+'_anual_Average_China_0.1X0.1.asc'
+  outfile ='/home/liufei/Data/High_resolution/0.1degree/'+Yr4+Mon2+'_NO2_Lok_0.1X0.1.asc'
   openw,lun,outfile,/get_lun
   printf,lun,header_output,no2_China
   close,lun
 
-endfor
+endfor;month
+endfor;year
 end
